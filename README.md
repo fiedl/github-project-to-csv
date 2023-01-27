@@ -15,6 +15,13 @@ Simple cli to export github v2 projects to csv
 1. Install the [github cli](https://cli.github.com): `brew install gh`
 2. Clone this repo: `git clone https://github.com/fiedl/github-project-to-csv.git`
 
+## Further Resources
+
+- [Github documentation on the projects api](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-api-to-manage-projects)
+- [Introduction to GraphQL](https://docs.github.com/en/graphql/guides/introduction-to-graphql)
+- [Understanding GraphQL Queries](https://graphql.org/learn/queries/)
+- [Github GraphQL Object Reference](https://docs.github.com/en/graphql/reference/objects)
+
 ## Author and License
 
 (c) 2023, Sebastian Fiedlschuster
