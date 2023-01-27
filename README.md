@@ -21,6 +21,7 @@ Simple cli to export github v2 projects to csv
 - [Introduction to GraphQL](https://docs.github.com/en/graphql/guides/introduction-to-graphql)
 - [Understanding GraphQL Queries](https://graphql.org/learn/queries/)
 - [Github GraphQL Object Reference](https://docs.github.com/en/graphql/reference/objects)
+- [Github GraphQL API Explorer](https://docs.github.com/en/graphql/overview/explorer)
 
 ## Author and License
 
