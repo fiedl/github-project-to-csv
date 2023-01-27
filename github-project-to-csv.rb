@@ -16,7 +16,10 @@ class GithubQuery
   end
 
   def execute
-    @result = JSON.parse(`gh api graphql -f query='#{query}'`)
+    @result = `gh api graphql -f query='#{query}' 2>&1`
+    raise "gh command line client not installed. https://cli.github.com/. install with 'brew install gh'" if @result.include? "gh: command not found"
+
+    @result = JSON.parse(@result)
   end
 end
 
