@@ -18,20 +18,34 @@ class GithubQuery
 end
 
 class GithubProject < GithubQuery
-  def self.find_by(org:, number:)
-    execute("
-      query{
-        organization(login: \"#{org}\"){
-          projectV2(number: #{number}) {
-            id
+  def self.find_by(org: nil, user: nil, number:)
+    if org
+      execute("
+        query{
+          organization(login: \"#{org}\"){
+            projectV2(number: #{number}) {
+              id
+            }
           }
         }
-      }
-    ")
+      ")
+    elsif user
+      execute("
+        query{
+          user(login: \"#{user}\"){
+            projectV2(number: #{number}) {
+              id
+            }
+          }
+        }
+      ")
+    else
+      raise "Neither user nor org given"
+    end
   end
 
   def id
-    result.dig("data", "organization", "projectV2", "id")
+    result.dig("data", "organization", "projectV2", "id") || result.dig("data", "user", "projectV2", "id")
   end
 
   def items
