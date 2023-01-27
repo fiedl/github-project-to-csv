@@ -1,6 +1,9 @@
+#!/usr/bin/env ruby
+
 require 'json'
 require 'csv'
 require 'pry'
+require 'optparse'
 
 class GithubQuery
   attr_accessor :query, :result
@@ -209,4 +212,33 @@ class GithubProjectItem < GithubQuery
       [key, value]
     end.select { |key, value| not key.nil? }
   end
+end
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: ./github-project-to-csv.rb [options]"
+
+  opts.on("--project=URL", "Url of the github project, e.g. https://github.com/users/fiedl/projects/2") do |url|
+    options[:project_url] = url
+    options[:org], options[:project_number] = url.scan(/https:\/\/github.com\/orgs\/([^\/]*)\/projects\/([^\/]*)/).flatten if url.include? "orgs/"
+    options[:user], options[:project_number] = url.scan(/https:\/\/github.com\/users\/([^\/]*)\/projects\/([^\/]*)/).flatten if url.include? "users/"
+  end
+
+  opts.on("--output=FILENAME", "Name of the csv file to export the project to, e.g. project.csv") do |filename|
+    options[:filename] = filename
+  end
+end.parse!
+
+raise "Missing project url" unless options[:project_url]
+raise "Could not extract org or user from project url" unless options[:org] or options[:user]
+raise "Could not extract project number from project url" unless options[:project_number].to_i > 0
+
+github_project = GithubProject.find_by(org: options[:org], user: options[:user], number: options[:project_number])
+
+csv_content = github_project.to_csv
+
+if options[:filename]
+  File.write options[:filename], csv_content
+else
+  print csv_content + "\n"
 end
