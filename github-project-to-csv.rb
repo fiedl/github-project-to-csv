@@ -79,12 +79,18 @@ class GithubProject < GithubQuery
 end
 
 class GithubProjectItemCollection < GithubQuery
+  PAGINATION_BATCH_SIZE = 100
+
   def self.find_by(project_id:)
-    execute("
+    execute_paginated("
       query{
         node(id: \"#{project_id}\") {
           ... on ProjectV2 {
-            items(first: 100) {
+            items(first: ALL) {
+              pageInfo {
+                endCursor
+                hasNextPage
+              }
               nodes {
                 id
                 content{
@@ -172,6 +178,27 @@ class GithubProjectItemCollection < GithubQuery
         }
       }
     ")
+  end
+
+  def self.execute_paginated(query)
+    github_project_item_collection = nil
+    all_nodes = []
+    pagination_string = "first: #{PAGINATION_BATCH_SIZE}"
+
+    loop do
+      github_project_item_collection = page = execute(query.gsub("first: ALL", pagination_string))
+      all_nodes += page.result.dig("data", "node", "items", "nodes")
+
+      if page.result.dig("data", "node", "items", "pageInfo", "hasNextPage")
+        last_cursor_id = page.result.dig("data", "node", "items", "pageInfo", "endCursor")
+        pagination_string = "first: #{PAGINATION_BATCH_SIZE}, after: \"#{last_cursor_id}\""
+      else
+        break
+      end
+    end
+
+    github_project_item_collection.result["data"]["node"]["items"]["nodes"] = all_nodes
+    github_project_item_collection
   end
 
   def items
