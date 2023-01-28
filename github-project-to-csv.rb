@@ -158,6 +158,16 @@ class GithubProjectItemCollection < GithubQuery
                         }
                       }
                     }
+                    ... on ProjectV2ItemFieldRepositoryValue {
+                      repository {
+                        name
+                      }
+                      field {
+                        ... on ProjectV2FieldCommon {
+                          name
+                        }
+                      }
+                    }
                     ... on ProjectV2ItemFieldUserValue {
                       users(first: 10) {
                         nodes {
@@ -244,6 +254,7 @@ class GithubProjectItem < GithubQuery
         field_value_data.dig("title") || \
         field_value_data.dig("name") || \
         field_value_data.dig("milestone", "title") || \
+        field_value_data.dig("repository", "name") || \
         field_value_data.dig("users", "nodes", 0, "login")
       [key, value]
     end.select { |key, value| not key.nil? }
