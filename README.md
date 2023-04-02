@@ -15,6 +15,16 @@ Simple cli to export github v2 projects to csv
 1. Install the [github cli](https://cli.github.com): `brew install gh`
 2. Clone this repo: `git clone https://github.com/fiedl/github-project-to-csv.git`
 
+## Using github personal access tokens
+
+Instead of using the `gh` command-line client, this tool also supports [github personal access tokens](https://github.com/settings/tokens). However, github does only support classic personal access tokens for now; fine-grained tokens do not work, yet.
+
+Create a classic token `xxx` at https://github.com/settings/tokens. Then:
+
+```shell
+./github-project-to-csv.rb --project https://github.com/users/fiedl/projects/2 --output project.csv --token xxx
+```
+
 ## Further Resources
 
 - [Github documentation on the projects api](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-api-to-manage-projects)

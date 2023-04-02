@@ -4,9 +4,14 @@ require 'json'
 require 'csv'
 require 'pry'
 require 'optparse'
+require 'httparty'
 
 class GithubQuery
   attr_accessor :query, :result
+
+  class << self
+    attr_accessor :personal_access_token
+  end
 
   def self.execute(query)
     github_query = self.new
@@ -16,6 +21,14 @@ class GithubQuery
   end
 
   def execute
+    if GithubQuery.personal_access_token
+      execute_with_https
+    else
+      execute_with_gh_client
+    end
+  end
+
+  def execute_with_gh_client
     command = "gh api graphql -f query='#{query}' 2>&1"
     @result = `#{command}`
     raise "gh command line client not installed. https://cli.github.com/. install with 'brew install gh'" if @result.include? "gh: command not found"
@@ -26,6 +39,14 @@ class GithubQuery
     end
 
     @result = JSON.parse(@result)
+  end
+
+  def execute_with_https
+    url = "https://api.github.com/graphql"
+    body = {query: query}.to_json
+    headers = {"Authorization" => "Bearer #{GithubQuery.personal_access_token}"}
+    @result = HTTParty.post(url, body:, headers:)
+    raise @result["message"] if @result["message"]
   end
 end
 
@@ -274,12 +295,17 @@ OptionParser.new do |opts|
   opts.on("--output=FILENAME", "Name of the csv file to export the project to, e.g. project.csv") do |filename|
     options[:filename] = filename
   end
+
+  opts.on("--personal-access-token=TOKEN", "--token=TOKEN", "Personal access token for github, https://github.com/settings/tokens?type=beta") do |token|
+    options[:github_personal_access_token] = token
+  end
 end.parse!
 
 raise "Missing project url" unless options[:project_url]
 raise "Could not extract org or user from project url" unless options[:org] or options[:user]
 raise "Could not extract project number from project url" unless options[:project_number].to_i > 0
 
+GithubQuery.personal_access_token = options[:github_personal_access_token]
 github_project = GithubProject.find_by(org: options[:org], user: options[:user], number: options[:project_number])
 
 csv_content = github_project.to_csv
