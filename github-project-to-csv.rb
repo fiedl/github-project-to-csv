@@ -137,11 +137,21 @@ class GithubProjectItemCollection < GithubQuery
                     title
                     number
                     url
+                    labels(first: 20) {
+                      nodes {
+                        name
+                      }
+                    }
                   }
                   ...on PullRequest {
                     title
                     number
                     url
+                    labels(first: 20) {
+                      nodes {
+                        name
+                      }
+                    }
                   }
                 }
                 fieldValues(first: 50) {
@@ -275,6 +285,10 @@ class GithubProjectItem < GithubQuery
     [number, field_value_attributes["Title"]].join(" ")
   end
 
+  def labels
+    result.dig("content", "labels", "nodes")&.collect { |label_data| label_data["name"] }&.join(", ")
+  end
+
   def attributes
     direct_attributes.merge(field_value_attributes)
   end
@@ -284,7 +298,8 @@ class GithubProjectItem < GithubQuery
       id:,
       number:,
       title:,
-      url:
+      url:,
+      labels:
     }
   end
 
