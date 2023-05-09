@@ -1,15 +1,23 @@
 #!/usr/bin/env ruby
 
-require 'json'
-require 'csv'
-require 'pry'
-require 'optparse'
-require 'httparty'
 if RUBY_VERSION < '3.2'
   print "\n"
   print "This script requires ruby version 3.2 or higher.\n\n"
   print "Please install a newer ruby version.\n"
   raise "This script requires ruby version 3.2 or higher"
+end
+
+begin
+  require 'json'
+  require 'csv'
+  require 'pry'
+  require 'optparse'
+  require 'httparty'
+rescue LoadError => exception
+  print "\n"
+  print "This script requires gems to be installed. Please run:\n\n"
+  print "  gem install pry httparty\n\n"
+  raise exception
 end
 
 class GithubQuery

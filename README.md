@@ -33,6 +33,12 @@ Create a classic token `xxx` at https://github.com/settings/tokens. Then:
 
 Your local ruby version is too old. Please update according to the [ruby documentation](https://www.ruby-lang.org/en/documentation/installation/).
 
+### require: cannot load such file
+
+Some gems are missing locally. Run:
+
+    gem install pry httparty
+
 ## Further Resources
 
 - [Github documentation on the projects api](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-api-to-manage-projects)
