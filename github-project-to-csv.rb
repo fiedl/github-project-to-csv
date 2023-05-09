@@ -136,10 +136,12 @@ class GithubProjectItemCollection < GithubQuery
                   ...on Issue {
                     title
                     number
+                    url
                   }
                   ...on PullRequest {
                     title
                     number
+                    url
                   }
                 }
                 fieldValues(first: 20) {
@@ -265,6 +267,10 @@ class GithubProjectItem < GithubQuery
     "##{result.dig("content", "number")}" if result.dig("content", "number")
   end
 
+  def url
+    result.dig("content", "url")
+  end
+
   def title
     [number, field_value_attributes["Title"]].join(" ")
   end
@@ -275,9 +281,10 @@ class GithubProjectItem < GithubQuery
 
   def direct_attributes
     {
-      id: id,
-      number: number,
-      title: title
+      id:,
+      number:,
+      title:,
+      url:
     }
   end
 
