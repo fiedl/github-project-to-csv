@@ -10,7 +10,7 @@ Simple cli to export github v2 projects to csv
 ./github-project-to-csv.rb --project https://github.com/users/fiedl/projects/2 --output project.csv
 ```
 
-If you do encounter errors here, please check the [troubleshooting section](#troubleshooting) to make sure you have the correct ruby version and gems installed.
+If you do encounter errors here, please check the [troubleshooting section](#troubleshooting) to make sure you have the correct ruby version and gems installed, or [run the script via docker](#running-with-docker).
 
 ## Installation
 
@@ -27,17 +27,33 @@ Create a classic token `xxx` at https://github.com/settings/tokens. Then:
 ./github-project-to-csv.rb --project https://github.com/users/fiedl/projects/2 --output project.csv --token xxx
 ```
 
+## Running with docker
+
+If you don't have a local ruby environment, it might be easiest to run this script via docker.
+
+Install docker including the compose plugin: https://docs.docker.com/compose/install/
+
+Then run this from the repository directory:
+
+```shell
+docker compose run app bundle exec ruby github-project-to-csv.rb --project https://github.com/users/fiedl/projects/2 --output project.csv --token xxx
+```
+
+When not using an access token, this might ask you to manually open a web browser and copy an authentication code in order to authenticate with github.
+
 ## Troubleshooting
 
 ### This script requires ruby version 3.2 or higher
 
-Your local ruby version is too old. Please update according to the [ruby documentation](https://www.ruby-lang.org/en/documentation/installation/).
+Your local ruby version is too old. Please update according to the [ruby documentation](https://www.ruby-lang.org/en/documentation/installation/) or [run the script via docker](#running-with-docker).
 
 ### require: cannot load such file
 
 Some gems are missing locally. Run:
 
     gem install pry httparty
+
+Or [run the script via docker](#running-with-docker).
 
 ## Further Resources
 
