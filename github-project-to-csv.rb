@@ -5,6 +5,12 @@ require 'csv'
 require 'pry'
 require 'optparse'
 require 'httparty'
+if RUBY_VERSION < '3.2'
+  print "\n"
+  print "This script requires ruby version 3.2 or higher.\n\n"
+  print "Please install a newer ruby version.\n"
+  raise "This script requires ruby version 3.2 or higher"
+end
 
 class GithubQuery
   attr_accessor :query, :result

@@ -10,6 +10,8 @@ Simple cli to export github v2 projects to csv
 ./github-project-to-csv.rb --project https://github.com/users/fiedl/projects/2 --output project.csv
 ```
 
+If you do encounter errors here, please check the [troubleshooting section](#troubleshooting) to make sure you have the correct ruby version and gems installed.
+
 ## Installation
 
 1. Install the [github cli](https://cli.github.com): `brew install gh`
@@ -24,6 +26,12 @@ Create a classic token `xxx` at https://github.com/settings/tokens. Then:
 ```shell
 ./github-project-to-csv.rb --project https://github.com/users/fiedl/projects/2 --output project.csv --token xxx
 ```
+
+## Troubleshooting
+
+### This script requires ruby version 3.2 or higher
+
+Your local ruby version is too old. Please update according to the [ruby documentation](https://www.ruby-lang.org/en/documentation/installation/).
 
 ## Further Resources
 
