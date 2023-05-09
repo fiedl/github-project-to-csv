@@ -144,7 +144,7 @@ class GithubProjectItemCollection < GithubQuery
                     url
                   }
                 }
-                fieldValues(first: 20) {
+                fieldValues(first: 50) {
                   nodes {
                     ... on ProjectV2ItemFieldTextValue {
                       text
