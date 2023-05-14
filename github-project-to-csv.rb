@@ -132,9 +132,11 @@ class GithubProjectItemCollection < GithubQuery
                 content{
                   ... on DraftIssue {
                     title
+                    body
                   }
                   ...on Issue {
                     title
+                    body
                     number
                     url
                     labels(first: 20) {
@@ -145,6 +147,7 @@ class GithubProjectItemCollection < GithubQuery
                   }
                   ...on PullRequest {
                     title
+                    body
                     number
                     url
                     labels(first: 20) {
@@ -285,6 +288,10 @@ class GithubProjectItem < GithubQuery
     [number, field_value_attributes["Title"]].join(" ")
   end
 
+  def body
+    result.dig("content", "body")
+  end
+
   def labels
     result.dig("content", "labels", "nodes")&.collect { |label_data| label_data["name"] }&.join(", ")
   end
@@ -298,6 +305,7 @@ class GithubProjectItem < GithubQuery
       id:,
       number:,
       title:,
+      body:,
       url:,
       labels:
     }
