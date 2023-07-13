@@ -319,6 +319,7 @@ class GithubProjectItem < GithubQuery
         field_value_data.dig("number") || \
         field_value_data.dig("title") || \
         field_value_data.dig("name") || \
+        field_value_data.dig("date") || \
         field_value_data.dig("milestone", "title") || \
         field_value_data.dig("repository", "name") || \
         field_value_data.dig("users", "nodes", 0, "login")
