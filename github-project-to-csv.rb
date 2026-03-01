@@ -140,6 +140,8 @@ class GithubProjectItemCollection < GithubQuery
                     body
                     number
                     url
+                    createdAt
+                    updatedAt
                     labels(first: 20) {
                       nodes {
                         name
@@ -151,6 +153,8 @@ class GithubProjectItemCollection < GithubQuery
                     body
                     number
                     url
+                    createdAt
+                    updatedAt
                     labels(first: 20) {
                       nodes {
                         name
@@ -277,8 +281,16 @@ class GithubProjectItem < GithubQuery
     result.dig("id")
   end
 
-  def created_at
+  def added_at
     result.dig("createdAt")
+  end
+
+  def created_at
+    result.dig("content", "createdAt")
+  end
+
+  def updated_at
+    result.dig("content", "updatedAt")
   end
 
   def number
@@ -309,6 +321,8 @@ class GithubProjectItem < GithubQuery
     {
       id:,
       created_at:,
+      updated_at:,
+      added_at:,
       number:,
       title:,
       body:,
