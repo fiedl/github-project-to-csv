@@ -129,6 +129,7 @@ class GithubProjectItemCollection < GithubQuery
               }
               nodes {
                 id
+                createdAt
                 content{
                   ... on DraftIssue {
                     title
@@ -139,6 +140,8 @@ class GithubProjectItemCollection < GithubQuery
                     body
                     number
                     url
+                    createdAt
+                    updatedAt
                     labels(first: 20) {
                       nodes {
                         name
@@ -150,6 +153,8 @@ class GithubProjectItemCollection < GithubQuery
                     body
                     number
                     url
+                    createdAt
+                    updatedAt
                     labels(first: 20) {
                       nodes {
                         name
@@ -276,6 +281,18 @@ class GithubProjectItem < GithubQuery
     result.dig("id")
   end
 
+  def added_at
+    result.dig("createdAt")
+  end
+
+  def created_at
+    result.dig("content", "createdAt")
+  end
+
+  def updated_at
+    result.dig("content", "updatedAt")
+  end
+
   def number
     "##{result.dig("content", "number")}" if result.dig("content", "number")
   end
@@ -303,6 +320,9 @@ class GithubProjectItem < GithubQuery
   def direct_attributes
     {
       id:,
+      created_at:,
+      updated_at:,
+      added_at:,
       number:,
       title:,
       body:,
